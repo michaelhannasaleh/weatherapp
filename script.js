@@ -1,17 +1,18 @@
-var key = "27643ed14a014e6ae93bb7e28d2eeb94";
+var key = "b69c113763b7ef255682264fdb188c14";
 var city = "";
-var queryUrl = "http://api.openweathermap.org/data/2.5/forecast?q=" + city + "appid=" + key
 var searchMethod = "city";
 var tempUnit = "metric";
 $(document).ready(); 
 
- function searchWeather(searchTerm){
- fetch(`http://api.openweathermap.org/data/2.5/forecast?${searchMethod}=${searchTerm}&key=${key}&tempUnit=${tempUnit}`).then(result => {
-    return result.json();
-}).then(result => {
+function searchWeather(searchTm){
+    var queryUrl = "http://api.openweathermap.org/data/2.5/weather?q=" + searchTm + "&appid=" + key + "&units=" + tempUnit
+ $.get(queryUrl)
+ .then((result) => {
     init(result);
-})
- }
+
+});
+
+}
 //  $.ajax({
 //  url: queryUrl,
 //      Method: "GET"
@@ -48,25 +49,25 @@ function init(resultFromServer) {
     }
 
     var weatherDiscription = $("weather-discrip-header");
-    var tempelement = $('#temp');
-    var humidity = $("humidity");
-    var wind = $("wind");
-    var uvIndex = $("uv-index");
-    var cityHeader = $("city-header");
+    var tempelement = document.querySelector('#temp');
+    var humidity = document.querySelector("#humidity");
+    var wind = document.querySelector("#wind");
+    //var uvIndex = document.querySelector("#uv-index");
+    var cityHeader = document.querySelector("#city-header");
     var weatherImg = $("document-img");
     var resultDiscription = resultFromServer.weather[0].description;
-    weatherDiscription.innertext = resultDiscription.charAt(0).upperCase() + resultDiscription.slice(1);
-    tempelement.innerHTML = resultFromServer.main.temp;
-    wind.innerHTML = " wind at " + resultFromServer.wind.speed;
+    weatherDiscription.innertext = resultDiscription;
+    tempelement.innerHTML = resultFromServer.main.temp + " &#176; "
+    wind.innerHTML = " wind at " + resultFromServer.wind.speed + " M/S "
     cityHeader.innerHTML = resultFromServer.name;
-    humidity.innerHTML = " Humidity Levels at " + resultFromServer.main.humidity;
-    uvIndex.innerHTML = " UV Index at " + resultFromServer
+    humidity.innerHTML = " Humidity Levels at " + resultFromServer.main.humidity + " % "
+    uvIndex.innerHTML = " UV Index at " + resultFromServer;
 
     weatherImg.src = "http://openweathermap.org/img/wn/" + resultFromServer.weather[0].icon + ".pmg";
 }
 
     function infoBoxPosition(){
-        var weatherContainer = $("#weather-container");
+        var weatherContainer = $("#wather-container");
         var infoBoxH = weatherContainer.clientHeight;
         var infoBoxW = weatherContainer.clientWidth;
 
@@ -77,9 +78,9 @@ function init(resultFromServer) {
 
 
 document.getElementById("search-button").addEventListener("click", () => {
-var searchTerm = document.getElementById("search-input").value;
+var searchTerm = document.querySelector("#search-input").value;
 
-if(searchTerm)
+//if(searchTerm)
 searchWeather(searchTerm);
 })
 
